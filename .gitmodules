@@ -1,7 +1,8 @@
+[submodule "third_party/scratchy"]
+	path = third_party/scratchy
+	url = https://github.com/JoaoComini/scratchy
+
 [submodule "third_party/googletest"]
 	path = third_party/googletest
 	url = https://github.com/google/googletest
 	branch = v1.10.x
-[submodule "third_party/scratchy"]
-	path = third_party/scratchy
-	url = https://github.com/JoaoComini/scratchy
