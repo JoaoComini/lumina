@@ -15,7 +15,13 @@ add_library(
     ${SOURCE_FILES}
 )
 
-add_subdirectory(third_party/enet-1.3.14)
+add_subdirectory(third_party/enet)
 add_subdirectory(third_party/scratchy)
 
-target_link_libraries(lumina LINK_PUBLIC enet scratchy)
+target_include_directories(
+    enet 
+    PUBLIC 
+    third_party/enet/include
+)
+
+target_link_libraries(lumina PUBLIC enet scratchy)

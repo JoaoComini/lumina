@@ -6,3 +6,6 @@
 	path = third_party/googletest
 	url = https://github.com/google/googletest
 	branch = v1.10.x
+[submodule "third_party/enet"]
+	path = third_party/enet
+	url = https://github.com/lsalzman/enet
