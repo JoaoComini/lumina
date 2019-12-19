@@ -1,11 +1,14 @@
 [submodule "third_party/scratchy"]
 	path = third_party/scratchy
 	url = https://github.com/JoaoComini/scratchy
+	branch = master
 
 [submodule "third_party/googletest"]
 	path = third_party/googletest
 	url = https://github.com/google/googletest
 	branch = v1.10.x
+	
 [submodule "third_party/enet"]
 	path = third_party/enet
 	url = https://github.com/lsalzman/enet
+	branch = master
