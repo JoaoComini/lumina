@@ -5,14 +5,16 @@ include_directories("./include")
 
 set(
     SOURCE_FILES
-    "./src/network/Address.cpp"
     "./src/network/Server.cpp"
+    "./src/network/Client.cpp"
 )
 
 set(
     HEADER_FILES
-    "./include/network/Address.hpp"
     "./include/network/Server.hpp"
+    "./include/network/Client.hpp"
+    "./include/network/Address.hpp"
+    "./include/network/Packet.hpp"
 )
 
 add_library(

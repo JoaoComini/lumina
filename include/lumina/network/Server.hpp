@@ -1,6 +1,12 @@
+#pragma once
+
 #include "enet/enet.h"
 #include <iostream>
-#include <chrono>
+#include <functional>
+#include <map>
+
+#include "lumina/network/Packet.hpp"
+
 
 namespace lumina {
 
@@ -10,47 +16,28 @@ class Server
 {
 
 public:
-    class Builder;
-
+    Server(uint16_t port, uint16_t connections);
     ~Server();
 
+    void bind();
+    void close();
+    
     void listen();
-    size_t getChannels() const;
-    size_t getConnections() const;
-    uint16_t getTickRate() const;
-    ENetAddress getAddress() const;
+    void stop();
 
 protected:
-    Server(uint16_t port, size_t connections, size_t channels, uint16_t tickRate);
+    virtual void onReceive(Packet * packet) = 0;
+    virtual void onConnect(std::shared_ptr<Client> client) = 0;
+    virtual void onDisconnect(std::shared_ptr<Client> client) = 0;
+
+    std::map<std::pair<uint32_t, uint16_t>, std::shared_ptr<Client>> clients;
 
 private:    
     ENetAddress address;
     ENetHost *host;
-    
-    size_t connections;
-    size_t channels;
-    uint16_t tickRate;
-
     bool listening;
+    uint16_t connections;
 }; 
-
-class Server::Builder
-{
-    public:
-        Builder& setPort(uint16_t port);
-        Builder& setConnections(size_t connections);
-        Builder& setChannels(size_t channels);
-        Builder& setTickRate(uint16_t tickRate);
-
-        Server build() const;
-        Server * buildPtr() const;
-    
-    private:
-        uint16_t port = 7777;
-        size_t connections = 32;
-        size_t channels = 1;
-        uint16_t tickRate = 10;
-};
 
 }
 

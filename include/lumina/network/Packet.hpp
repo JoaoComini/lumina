@@ -1,12 +1,20 @@
+#pragma once
 
-class Packet
+#include "Client.hpp"
+
+namespace lumina {
+
+namespace network {
+
+struct Packet
 {
-    
-private:
-    // uint_8t
-    
-public:
-    Packet();
-    ~Packet();
-
+    std::shared_ptr<Client> source;
+    uint8_t * data;
+    size_t length;
 };
+
+
+}
+
+}
+

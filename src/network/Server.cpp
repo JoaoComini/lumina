@@ -1,140 +1,84 @@
 #include "lumina/network/Server.hpp"
 
 namespace lumina {
-
 namespace network {
 
-Server::Server(
-    uint16_t port,
-    size_t connections,
-    size_t channels,
-    uint16_t tickRate):
-        connections(connections),
-        channels(channels),
-        tickRate(tickRate)
-{
-    this->address.host = ENET_HOST_ANY;
-    this->address.port = port;
-
-    this->host = enet_host_create(&address, this->connections, this->channels, 0, 0);
-
-    if (this->host ==  NULL) {
-        std::cerr << "An error occurred while trying to create an ENet server host." << std::endl;
-
-        std::exit(EXIT_FAILURE);
+    Server::Server(uint16_t port, uint16_t connections) : connections(connections) {
+        this->address.host = ENET_HOST_ANY;
+        this->address.port = port;
     }
-}
 
-Server::~Server()
-{
-    enet_host_destroy(this->host);
-}
+    Server::~Server()
+    {
+        enet_host_destroy(this->host);
+    }
 
-void Server::listen()
-{
-    this->listening = true;
+    void Server::bind()
+    {
+        if (enet_initialize () != 0) {
+            std::cerr << "An error occurred while trying to initialize ENet server host." << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
 
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    double counter = 0;
+        this->host = enet_host_create(&this->address, this->connections, 1, 0, 0);
 
-    while (this->listening) {
+        if (this->host ==  NULL) {
+            std::cerr << "An error occurred while trying to create an ENet server host." << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+    }
+
+    void Server::listen()
+    {
+        this->listening = true;
 
         ENetEvent event;
 
-        auto newTime = std::chrono::high_resolution_clock::now();
-        counter = std::chrono::duration_cast<std::chrono::milliseconds>(newTime - currentTime).count();
+        while (this->listening) {
 
-        while (counter >= 1000/this->tickRate) {
-            
             while (enet_host_service (this->host, &event, 0) > 0) {
 
                 switch (event.type) {
 
-                    case ENET_EVENT_TYPE_CONNECT:
-                        // TODO: Implement connection logic.
+                    case ENET_EVENT_TYPE_CONNECT: {
+                        std::shared_ptr<Client> client = std::make_shared<Client>(event.peer);
+
+                        auto key = std::make_pair(client->getHost(), client->getPort());
+
+                        this->clients[key] = client;
+
+                        this->onConnect(client);
+
                         break;
-                    case ENET_EVENT_TYPE_RECEIVE:
-                        // TODO: Use packet factory to deal with packages.                
+                    }
+                    case ENET_EVENT_TYPE_RECEIVE: {
+                        Packet * packet = new Packet();
+
+                        packet->data = event.packet->data;
+                        packet->length = event.packet->dataLength;
+                        packet->source = std::make_shared<Client>(event.peer);
+
+                        this->onReceive(packet);
+
                         break;
-                    
-                    case ENET_EVENT_TYPE_DISCONNECT:
-                        // TODO: Implement disconnection logic.
+                    }
+                    case ENET_EVENT_TYPE_DISCONNECT: {
+                        std::shared_ptr<Client> client = std::make_shared<Client>(event.peer);
+
+                        auto key = std::make_pair(client->getHost(), client->getPort());
+
+                        this->clients.erase(key);
+
+                        this->onDisconnect(client);
+
                         break;
+                    }
                 }
 
             }
-
-            counter -= 1000/this->tickRate;
         }
-
-        currentTime = std::chrono::high_resolution_clock::now();
     }
-}
 
-size_t Server::getChannels() const {
-    return this->channels;
-}
-
-size_t Server::getConnections() const {
-    return this->connections;
-}
-
-uint16_t Server::getTickRate() const {
-    return this->tickRate;
-}
-
-ENetAddress Server::getAddress() const {
-    return this->address;
-}
-
-Server::Builder& Server::Builder::setPort(uint16_t port)
-{
-    this->port = port;
-
-    return *this;
-}
-
-Server::Builder& Server::Builder::setConnections(size_t connections)
-{
-    this->connections = connections;
-    
-    return *this;
-}
-
-Server::Builder& Server::Builder::setChannels(size_t channels)
-{
-    this->channels = channels;
-
-    return *this;
-}
-
-Server::Builder& Server::Builder::setTickRate(uint16_t tickRate)
-{
-    this->tickRate = tickRate;
-
-    return *this;
-}
-
-Server Server::Builder::build() const
-{
-    return Server(
-        this->port,
-        this->connections,
-        this->channels,
-        this->tickRate
-    );
-}
-
-Server * Server::Builder::buildPtr() const
-{
-    return new Server(
-        this->port,
-        this->connections,
-        this->channels,
-        this->tickRate
-    );
-}
 
 }
-
 }
