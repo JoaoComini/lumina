@@ -1,4 +1,4 @@
-#include <lumina/Address.hpp>
+#include "lumina/network/Address.hpp"
 
 Address::Address(unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned short port) {
 

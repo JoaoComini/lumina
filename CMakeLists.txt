@@ -1,18 +1,18 @@
 cmake_minimum_required(VERSION 3.8)
-project(lumina VERSION 0.1.0)
+project(lumina VERSION 0.0.0)
 
 include_directories("./include")
 
 set(
     SOURCE_FILES
-    "./src/Address.cpp"
-    "./src/Server.cpp"
+    "./src/network/Address.cpp"
+    "./src/network/Server.cpp"
 )
 
 set(
     HEADER_FILES
-    "./src/Address.hpp"
-    "./src/Server.hpp"
+    "./include/network/Address.hpp"
+    "./include/network/Server.hpp"
 )
 
 add_library(
@@ -26,13 +26,22 @@ target_compile_features(lumina PRIVATE cxx_std_11)
 add_subdirectory(third_party/enet)
 add_subdirectory(third_party/scratchy)
 
+set(PHYSX_ROOT_DIR ${CMAKE_SOURCE_DIR}/third_party/PhysX/physx)
+set(PXSHARED_PATH ${PHYSX_ROOT_DIR}/../pxshared)
+set(PXSHARED_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+set(CMAKEMODULES_PATH ${PHYSX_ROOT_DIR}/../externals/cmakemodules)
+set(PX_OUTPUT_LIB_DIR ${CMAKE_CURRENT_BINARY_DIR}/build/PhysX)
+set(PX_OUTPUT_BIN_DIR ${CMAKE_CURRENT_BINARY_DIR}/build/PhysX)
+
+add_subdirectory(third_party/PhysX/physx/compiler/public)
+
 target_include_directories(
     enet 
     PUBLIC 
     third_party/enet/include
 )
 
-target_link_libraries(lumina PRIVATE enet scratchy)
+target_link_libraries(lumina PUBLIC enet scratchy PhysX)
 
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
 
@@ -40,6 +49,7 @@ if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
 
     set(
         TEST_SOURCE_FILES
+        "test/network/unit/ServerTest.cpp"
     )
 
     add_executable(

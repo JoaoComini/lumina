@@ -1,6 +1,10 @@
-#include <enet/enet.h>
+#include "enet/enet.h"
 #include <iostream>
 #include <chrono>
+
+namespace lumina {
+
+namespace network {
 
 class Server
 {
@@ -11,13 +15,17 @@ public:
     ~Server();
 
     void listen();
+    size_t getChannels() const;
+    size_t getConnections() const;
+    uint16_t getTickRate() const;
+    ENetAddress getAddress() const;
 
 protected:
     Server(uint16_t port, size_t connections, size_t channels, uint16_t tickRate);
 
 private:    
     ENetAddress address;
-    ENetHost *server;
+    ENetHost *host;
     
     size_t connections;
     size_t channels;
@@ -35,6 +43,7 @@ class Server::Builder
         Builder& setTickRate(uint16_t tickRate);
 
         Server build() const;
+        Server * buildPtr() const;
     
     private:
         uint16_t port = 7777;
@@ -42,3 +51,7 @@ class Server::Builder
         size_t channels = 1;
         uint16_t tickRate = 10;
 };
+
+}
+
+}

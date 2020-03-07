@@ -12,3 +12,7 @@
 	path = third_party/enet
 	url = https://github.com/lsalzman/enet
 	branch = master
+	
+[submodule "third_party/PhysX"]
+	path = third_party/PhysX
+	url = https://github.com/NVIDIAGameWorks/PhysX

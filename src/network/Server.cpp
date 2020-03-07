@@ -1,4 +1,8 @@
-#include <lumina/Server.hpp>
+#include "lumina/network/Server.hpp"
+
+namespace lumina {
+
+namespace network {
 
 Server::Server(
     uint16_t port,
@@ -12,9 +16,9 @@ Server::Server(
     this->address.host = ENET_HOST_ANY;
     this->address.port = port;
 
-    this->server = enet_host_create(&address, this->connections, this->channels, 0, 0);
+    this->host = enet_host_create(&address, this->connections, this->channels, 0, 0);
 
-    if (server ==  NULL) {
+    if (this->host ==  NULL) {
         std::cerr << "An error occurred while trying to create an ENet server host." << std::endl;
 
         std::exit(EXIT_FAILURE);
@@ -23,7 +27,7 @@ Server::Server(
 
 Server::~Server()
 {
-    enet_host_destroy(this->server);
+    enet_host_destroy(this->host);
 }
 
 void Server::listen()
@@ -42,7 +46,7 @@ void Server::listen()
 
         while (counter >= 1000/this->tickRate) {
             
-            while (enet_host_service (this->server, &event, 0) > 0) {
+            while (enet_host_service (this->host, &event, 0) > 0) {
 
                 switch (event.type) {
 
@@ -65,6 +69,22 @@ void Server::listen()
 
         currentTime = std::chrono::high_resolution_clock::now();
     }
+}
+
+size_t Server::getChannels() const {
+    return this->channels;
+}
+
+size_t Server::getConnections() const {
+    return this->connections;
+}
+
+uint16_t Server::getTickRate() const {
+    return this->tickRate;
+}
+
+ENetAddress Server::getAddress() const {
+    return this->address;
 }
 
 Server::Builder& Server::Builder::setPort(uint16_t port)
@@ -103,4 +123,18 @@ Server Server::Builder::build() const
         this->channels,
         this->tickRate
     );
+}
+
+Server * Server::Builder::buildPtr() const
+{
+    return new Server(
+        this->port,
+        this->connections,
+        this->channels,
+        this->tickRate
+    );
+}
+
+}
+
 }
