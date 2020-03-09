@@ -7,6 +7,8 @@ set(
     SOURCE_FILES
     "./src/network/Server.cpp"
     "./src/network/Client.cpp"
+    "./src/engine/LuminaServer.cpp"
+    "./src/engine/Room.cpp"
 )
 
 set(
@@ -15,6 +17,8 @@ set(
     "./include/network/Client.hpp"
     "./include/network/Address.hpp"
     "./include/network/Packet.hpp"
+    "./include/engine/LuminaServer.hpp"
+    "./include/engine/Room.hpp"
 )
 
 add_library(
