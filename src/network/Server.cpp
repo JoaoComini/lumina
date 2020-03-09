@@ -13,6 +13,18 @@ namespace network {
         enet_host_destroy(this->host);
     }
 
+    void Server::enqueueUnreliable(std::shared_ptr<Client> client, Packet * packet)
+    {
+        ENetPacket * enetPacket = enet_packet_create (packet->data, packet->length, ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
+        enet_peer_send (client->getPeer(), 0, enetPacket);
+    }
+
+    void Server::enqueueReliable(std::shared_ptr<Client> client, Packet * packet)
+    {
+        ENetPacket * enetPacket = enet_packet_create (packet->data, packet->length, ENET_PACKET_FLAG_RELIABLE);
+        enet_peer_send (client->getPeer(), 1, enetPacket);
+    }
+
     void Server::bind()
     {
         if (enet_initialize () != 0) {
@@ -20,7 +32,7 @@ namespace network {
             std::exit(EXIT_FAILURE);
         }
 
-        this->host = enet_host_create(&this->address, this->connections, 1, 0, 0);
+        this->host = enet_host_create(&this->address, this->connections, 2, 0, 0);
 
         if (this->host ==  NULL) {
             std::cerr << "An error occurred while trying to create an ENet server host." << std::endl;

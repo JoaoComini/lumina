@@ -25,6 +25,9 @@ public:
     void listen();
     void stop();
 
+    void sendUnreliable(std::shared_ptr<Client> destination, Packet * packet);
+    void sendReliable(std::shared_ptr<Client> destination, Packet * packet);
+
 protected:
     virtual void onReceive(Packet * packet) = 0;
     virtual void onConnect(std::shared_ptr<Client> client) = 0;

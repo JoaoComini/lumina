@@ -17,6 +17,7 @@ public:
 
    uint32_t getHost();
    uint16_t getPort();
+   ENetPeer * getPeer();
 
 private:
    ENetPeer * peer;

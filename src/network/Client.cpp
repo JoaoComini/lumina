@@ -20,5 +20,10 @@ namespace network {
     {
         return this->address.port;
     }
+
+    ENetPeer * Client::getPeer()
+    {
+        return this->peer;
+    }
 }
 }
