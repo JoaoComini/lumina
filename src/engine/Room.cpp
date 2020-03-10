@@ -3,12 +3,9 @@
 namespace lumina
 {
     
-    Room::Room(size_t capacity): capacity(capacity)
-    {
-        this->players.resize(capacity);
-    }
+    Room::Room(size_t capacity): capacity(capacity) { }
 
-    void Room::addPlayer(std::shared_ptr<network::Client> client)
+    void Room::addPlayer(std::shared_ptr<net::Client> client)
     {
         if (this->isFull()) {
             return;

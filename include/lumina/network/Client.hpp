@@ -6,8 +6,7 @@
 #include "Address.hpp"
 
 namespace lumina {
-   
-namespace network {
+namespace net {
 
 class Client
 {
@@ -25,5 +24,4 @@ private:
 };
 
 }
-
 }

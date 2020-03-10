@@ -1,7 +1,7 @@
 #pragma once
 
 namespace lumina {
-namespace network {
+namespace net {
     
     struct Address
     {

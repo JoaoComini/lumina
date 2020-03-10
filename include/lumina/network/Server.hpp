@@ -9,8 +9,7 @@
 
 
 namespace lumina {
-
-namespace network {
+namespace net {
 
 class Server
 {
@@ -22,7 +21,7 @@ public:
     void bind();
     void close();
     
-    void listen();
+    void poll();
     void stop();
 
     void sendUnreliable(std::shared_ptr<Client> destination, Packet * packet);
@@ -44,5 +43,4 @@ private:
 }; 
 
 }
-
 }

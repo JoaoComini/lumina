@@ -3,8 +3,7 @@
 #include "Client.hpp"
 
 namespace lumina {
-
-namespace network {
+namespace net {
 
 struct Packet
 {
@@ -15,6 +14,5 @@ struct Packet
 
 
 }
-
 }
 

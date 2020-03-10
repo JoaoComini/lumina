@@ -6,7 +6,7 @@
 
 namespace lumina {
 
-    class LuminaServer : public network::Server
+    class LuminaServer : public net::Server
     {
 
     public:
@@ -14,9 +14,9 @@ namespace lumina {
 
 
     protected:
-        void onReceive (network::Packet * packet) override;
-        void onConnect(std::shared_ptr<network::Client> client) override;
-        void onDisconnect(std::shared_ptr<network::Client> client) override;
+        void onReceive (net::Packet * packet) override;
+        void onConnect(std::shared_ptr<net::Client> client) override;
+        void onDisconnect(std::shared_ptr<net::Client> client) override;
 
     private:        
         size_t roomIndex = 0;

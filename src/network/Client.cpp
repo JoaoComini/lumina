@@ -2,7 +2,7 @@
 
 
 namespace lumina {
-namespace network {
+namespace net {
 
     Client::Client(ENetPeer * peer)
     {
