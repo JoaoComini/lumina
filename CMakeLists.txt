@@ -43,6 +43,8 @@ set(PX_OUTPUT_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/build/PhysX")
 
 add_subdirectory(third_party/PhysX/physx/compiler/public)
 
+add_subdirectory(sandbox)
+
 target_include_directories(
     enet 
     PUBLIC 
