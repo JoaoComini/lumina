@@ -13,13 +13,13 @@ namespace network {
         enet_host_destroy(this->host);
     }
 
-    void Server::enqueueUnreliable(std::shared_ptr<Client> client, Packet * packet)
+    void Server::sendUnreliable(std::shared_ptr<Client> client, Packet * packet)
     {
         ENetPacket * enetPacket = enet_packet_create (packet->data, packet->length, ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
         enet_peer_send (client->getPeer(), 0, enetPacket);
     }
 
-    void Server::enqueueReliable(std::shared_ptr<Client> client, Packet * packet)
+    void Server::sendReliable(std::shared_ptr<Client> client, Packet * packet)
     {
         ENetPacket * enetPacket = enet_packet_create (packet->data, packet->length, ENET_PACKET_FLAG_RELIABLE);
         enet_peer_send (client->getPeer(), 1, enetPacket);
@@ -47,11 +47,11 @@ namespace network {
         ENetEvent event;
 
         while (this->listening) {
-
-            while (enet_host_service (this->host, &event, 0) > 0) {
+            while (enet_host_service (this->host, &event, 0) > 0) {    
+                std::cout << "lel" << std::endl;
 
                 switch (event.type) {
-
+                    
                     case ENET_EVENT_TYPE_CONNECT: {
                         std::shared_ptr<Client> client = std::make_shared<Client>(event.peer);
 
@@ -91,6 +91,15 @@ namespace network {
         }
     }
 
+    void Server::stop()
+    {
+        this->listening = false;
+    }
+
+    size_t Server::clientCount() const
+    {
+        return this->clients.size();
+    }
 
 }
 }

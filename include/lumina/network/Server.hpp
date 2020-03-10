@@ -1,9 +1,9 @@
 #pragma once
 
-#include "enet/enet.h"
 #include <iostream>
 #include <functional>
 #include <map>
+#include <atomic>
 
 #include "lumina/network/Packet.hpp"
 
@@ -27,6 +27,7 @@ public:
 
     void sendUnreliable(std::shared_ptr<Client> destination, Packet * packet);
     void sendReliable(std::shared_ptr<Client> destination, Packet * packet);
+    size_t clientCount() const;
 
 protected:
     virtual void onReceive(Packet * packet) = 0;
@@ -38,7 +39,7 @@ protected:
 private:    
     ENetAddress address;
     ENetHost *host;
-    bool listening;
+    std::atomic<bool> listening;
     uint16_t connections;
 }; 
 

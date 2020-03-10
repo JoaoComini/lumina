@@ -15,9 +15,9 @@ class Client
 public:
    Client(ENetPeer * peer);
 
-   uint32_t getHost();
-   uint16_t getPort();
-   ENetPeer * getPeer();
+   uint32_t getHost() const;
+   uint16_t getPort() const;
+   ENetPeer * getPeer() const;
 
 private:
    ENetPeer * peer;

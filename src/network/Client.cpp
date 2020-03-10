@@ -11,17 +11,17 @@ namespace network {
         this->address.host = this->peer->address.host;
     }
 
-    uint32_t Client::getHost()
+    uint32_t Client::getHost() const
     {
         return this->address.host;
     }
 
-    uint16_t Client::getPort()
+    uint16_t Client::getPort() const
     {
         return this->address.port;
     }
 
-    ENetPeer * Client::getPeer()
+    ENetPeer * Client::getPeer() const
     {
         return this->peer;
     }

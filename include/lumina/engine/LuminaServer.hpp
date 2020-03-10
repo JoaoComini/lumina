@@ -6,7 +6,7 @@
 
 namespace lumina {
 
-    class LuminaServer : network::Server
+    class LuminaServer : public network::Server
     {
 
     public:

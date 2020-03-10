@@ -32,12 +32,14 @@ target_compile_features(lumina PRIVATE cxx_std_11)
 add_subdirectory(third_party/enet)
 add_subdirectory(third_party/scratchy)
 
-set(PHYSX_ROOT_DIR ${CMAKE_SOURCE_DIR}/third_party/PhysX/physx)
-set(PXSHARED_PATH ${PHYSX_ROOT_DIR}/../pxshared)
-set(PXSHARED_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
-set(CMAKEMODULES_PATH ${PHYSX_ROOT_DIR}/../externals/cmakemodules)
-set(PX_OUTPUT_LIB_DIR ${CMAKE_CURRENT_BINARY_DIR}/build/PhysX)
-set(PX_OUTPUT_BIN_DIR ${CMAKE_CURRENT_BINARY_DIR}/build/PhysX)
+set(TARGET_BUILD_PLATFORM "linux")
+
+set(PHYSX_ROOT_DIR "${CMAKE_SOURCE_DIR}/third_party/PhysX/physx")
+set(PXSHARED_PATH "${PHYSX_ROOT_DIR}/../pxshared")
+set(PXSHARED_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
+set(CMAKEMODULES_PATH "${PHYSX_ROOT_DIR}/../externals/cmakemodules")
+set(PX_OUTPUT_LIB_DIR "${CMAKE_CURRENT_BINARY_DIR}/build/PhysX")
+set(PX_OUTPUT_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/build/PhysX")
 
 add_subdirectory(third_party/PhysX/physx/compiler/public)
 
@@ -47,7 +49,7 @@ target_include_directories(
     third_party/enet/include
 )
 
-target_link_libraries(lumina PUBLIC enet scratchy PhysX)
+target_link_libraries(lumina PUBLIC enet scratchy PhysX PhysXCharacterKinematic)
 
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
 
