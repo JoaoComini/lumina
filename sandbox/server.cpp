@@ -1,14 +1,28 @@
+#include <lumina/Lumina.hpp>
 
-#include <lumina/engine/LuminaServer.hpp>
+#include <lumina/network/Server.hpp>
+#include <lumina/protocol/Message.hpp>
+
 
 int main ()
-{
-    lumina::LuminaServer * server = new lumina::LuminaServer(7777);
+{   
+    using namespace lumina;
 
-    while (true)
-    {
-        server->poll();
+    net::Server * server = new net::Server(256);
+
+    server->bind(7777);
+
+    std::vector<Ref<protocol::Message>> messages;
+
+    while (true) {
+        messages = server->poll();
+
+        if (messages.size() > 0) {
+            std::cout
+            << "---------------------------------" << std:: endl
+            << "Received " << messages.size() << " message(s)." << std::endl
+            << "---------------------------------" << std:: endl;
+        }
     }
-    
 
 }

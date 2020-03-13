@@ -3,6 +3,8 @@
 #include <iostream> 
 #include <string> 
 
+#include <scratchy/InputBitStream.hpp>
+
 int main()
 {
     if (enet_initialize () != 0) {
@@ -48,7 +50,14 @@ int main()
         std::cout << "Connection to " << hostAddress << ":" << port << " made successfully." << std::endl;
     }
 
-    enet_host_flush(client);
+    while (enet_host_service (client, & event, 500) > 0) {
+        std::cout << "Received from server: " << event.type << std::endl;
+        InputBitStream stream = InputBitStream(event.packet->data, event.packet->dataLength);
+        
+        std::cout << "Message Type is: " << stream.read<uint16_t>() << std::endl;
+        std::cout << "My ID is: " << stream.read<uint16_t>() << std::endl;
+        std::cout << "My Room ID is: " << stream.read<uint16_t>() << std::endl;
+    }
 
     std::string buffer; 
 

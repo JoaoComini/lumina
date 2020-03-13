@@ -18,4 +18,4 @@ target_compile_features(client PRIVATE cxx_std_11)
 
 target_link_libraries(server PUBLIC lumina)
 
-target_link_libraries(client PUBLIC enet)
+target_link_libraries(client PUBLIC enet scratchy)
