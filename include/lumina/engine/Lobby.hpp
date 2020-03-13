@@ -9,9 +9,18 @@
 #include "../network/DisconnectionMessage.hpp"
 
 #include "Room.hpp"
+#include "Input.hpp"
 
 namespace lumina {
 namespace engine {
+
+    enum LobbyInputType
+    {
+        CREATE_ROOM,
+        ENTER_ROOM,
+        MATCHMAKING,
+        ROOM_INPUT,
+    };
 
     class Lobby
     {
