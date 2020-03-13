@@ -1,6 +1,6 @@
 #pragma once
 
-namespace lumina{  
+namespace lumina{
 namespace protocol {
 
     struct Message

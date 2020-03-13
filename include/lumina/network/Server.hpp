@@ -23,24 +23,24 @@ namespace net {
 
             void bind(uint16_t port);
             void close();
-            
+
             std::vector<Ref<protocol::Message>> poll();
             void stop();
 
             void send(protocol::Message * message, Client * destination);
-            
+
             size_t clientCount() const;
 
         protected:
             std::map<uint16_t, Ref<Client>> clients;
 
-        private:    
+        private:
             ENetAddress address;
             ENetHost *host;
             std::atomic<bool> listening;
             uint16_t connections;
             Scope<protocol::MessageFactory> messageFactory;
-    }; 
+    };
 
 }
 }

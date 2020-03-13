@@ -5,8 +5,8 @@
 
 namespace lumina {
 namespace net {
-        
-    struct DisconnectionMessage : protocol::Message 
+
+    struct DisconnectionMessage : protocol::Message
     {
         Ref<Client> client;
     };

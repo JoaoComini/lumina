@@ -22,7 +22,7 @@ namespace net {
         public:
             Ref<protocol::Message> create(uint8_t type) override;
     };
-    
+
 } // namespace net
 } // namespace lumina
 

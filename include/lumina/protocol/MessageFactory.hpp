@@ -13,6 +13,6 @@ namespace protocol {
             virtual ~MessageFactory() = default;
             virtual Ref<Message> create(uint8_t type) = 0;
     };
-    
+
 } // namespace net
 } // namespace lumina

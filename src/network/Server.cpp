@@ -85,7 +85,7 @@ namespace net {
                     message->client = this->clients[event.peer->incomingPeerID];
 
                     messages.push_back(message);
-                    
+
                     this->clients.erase(event.peer->incomingPeerID);
                 }
                 break;

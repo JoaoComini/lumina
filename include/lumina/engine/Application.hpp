@@ -15,8 +15,8 @@ namespace engine {
     public:
         Application();
 
-    private:        
-        
+    private:
+
     };
 
 }

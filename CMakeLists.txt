@@ -8,6 +8,9 @@ set(
     "./src/network/Server.cpp"
     "./src/network/Client.cpp"
     "./src/network/ServerMessageFactory.cpp"
+    "./src/engine/Lobby.cpp"
+    "./src/engine/Room.cpp"
+    "./src/engine/Application.cpp"
 )
 
 set(
@@ -43,8 +46,8 @@ add_subdirectory(third_party/PhysX/physx/compiler/public)
 add_subdirectory(sandbox)
 
 target_include_directories(
-    enet 
-    PUBLIC 
+    enet
+    PUBLIC
     third_party/enet/include
 )
 

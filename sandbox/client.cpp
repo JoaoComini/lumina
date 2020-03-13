@@ -1,7 +1,7 @@
 #include "enet/enet.h"
 
-#include <iostream> 
-#include <string> 
+#include <iostream>
+#include <string>
 
 #include <scratchy/InputBitStream.hpp>
 
@@ -24,7 +24,7 @@ int main()
     ENetPeer *peer;
     /* Connect to some.server.net:1234. */
 
-    std::string hostAddress; 
+    std::string hostAddress;
     uint16_t port;
 
     std::puts("Enter the server address:");
@@ -39,7 +39,7 @@ int main()
 
     address.port = port;
     /* Initiate the connection, allocating the two channels 0 and 1. */
-    peer = enet_host_connect (client, &address, 2, 0);    
+    peer = enet_host_connect (client, &address, 2, 0);
 
     if (peer == NULL) {
         exit(EXIT_FAILURE);
@@ -53,19 +53,19 @@ int main()
     while (enet_host_service (client, & event, 500) > 0) {
         std::cout << "Received from server: " << event.type << std::endl;
         InputBitStream stream = InputBitStream(event.packet->data, event.packet->dataLength);
-        
+
         std::cout << "Message Type is: " << stream.read<uint16_t>() << std::endl;
         std::cout << "My ID is: " << stream.read<uint16_t>() << std::endl;
         std::cout << "My Room ID is: " << stream.read<uint16_t>() << std::endl;
     }
 
-    std::string buffer; 
+    std::string buffer;
 
-    while (getline(std::cin, buffer)) { 
-        ENetPacket * packet = enet_packet_create (buffer.c_str(), 
-                                          buffer.size(), 
+    while (getline(std::cin, buffer)) {
+        ENetPacket * packet = enet_packet_create (buffer.c_str(),
+                                          buffer.size(),
                                           ENET_PACKET_FLAG_RELIABLE);
-                                  
+
         enet_peer_send(peer, 0, packet);
         enet_host_flush(client);
 
@@ -75,5 +75,5 @@ int main()
         while (enet_host_service (client, & event, 0) > 0) {
             std::cout << "Received from server: " << event.type << std::endl;
         }
-    } 
+    }
 }

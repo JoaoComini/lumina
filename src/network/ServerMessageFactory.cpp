@@ -14,12 +14,12 @@ namespace net {
             case ServerMessageType::DATA:
                 return makeRef<DataMessage>();
                 break;
-            
+
             default:
                 return nullptr;
                 break;
         }
     }
-        
+
 } // namespace net
 } // namespace lumina

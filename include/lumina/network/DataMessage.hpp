@@ -5,8 +5,8 @@
 
 namespace lumina {
 namespace net {
-        
-    struct DataMessage : protocol::Message 
+
+    struct DataMessage : protocol::Message
     {
         Ref<Client> client;
         void * data;
