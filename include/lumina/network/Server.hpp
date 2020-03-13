@@ -8,11 +8,22 @@
 
 #include "../Lumina.hpp"
 #include "../protocol/Message.hpp"
-#include "ServerMessageFactory.hpp"
+
+#include "ConnectionMessage.hpp"
+#include "DataMessage.hpp"
+#include "DisconnectionMessage.hpp"
+
 #include "Client.hpp"
 
 namespace lumina {
 namespace net {
+
+    enum ServerMessageType : uint8_t
+    {
+        CONNECT,
+        DISCONNECT,
+        DATA,
+    };
 
     class Server
     {
@@ -39,7 +50,6 @@ namespace net {
             ENetHost *host;
             std::atomic<bool> listening;
             uint16_t connections;
-            Scope<protocol::MessageFactory> messageFactory;
     };
 
 }

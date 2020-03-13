@@ -7,7 +7,6 @@ set(
     SOURCE_FILES
     "./src/network/Server.cpp"
     "./src/network/Client.cpp"
-    "./src/network/ServerMessageFactory.cpp"
     "./src/engine/Lobby.cpp"
     "./src/engine/Room.cpp"
     "./src/engine/Application.cpp"

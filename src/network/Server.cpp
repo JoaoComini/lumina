@@ -3,10 +3,7 @@
 namespace lumina {
 namespace net {
 
-    Server::Server(uint16_t connections) : connections(connections)
-    {
-        this->messageFactory = makeScope<ServerMessageFactory>();
-    }
+    Server::Server(uint16_t connections) : connections(connections){}
 
     Server::~Server()
     {
@@ -47,9 +44,7 @@ namespace net {
         while (enet_host_service (this->host, &event, 0) > 0) {
             switch (event.type) {
                 case ENET_EVENT_TYPE_CONNECT: {
-                    auto message = refCast<ConnectionMessage>(
-                        this->messageFactory->create(ServerMessageType::CONNECT)
-                    );
+                    auto message = makeRef<ConnectionMessage>();
 
                     Ref<Client> client = makeRef<Client>(event.peer);
                     this->clients[client->getId()] = client;
@@ -61,9 +56,7 @@ namespace net {
                 }
                 break;
                 case ENET_EVENT_TYPE_RECEIVE: {
-                    auto message = refCast<DataMessage>(
-                        this->messageFactory->create(ServerMessageType::DATA)
-                    );
+                    auto message = makeRef<DataMessage>();
 
                     Ref<Client> client = makeRef<Client>(event.peer);
                     this->clients[client->getId()] = client;
@@ -77,9 +70,7 @@ namespace net {
                 }
                 break;
                 case ENET_EVENT_TYPE_DISCONNECT: {
-                    auto message = refCast<DisconnectionMessage>(
-                        this->messageFactory->create(ServerMessageType::DISCONNECT)
-                    );
+                    auto message = makeRef<DisconnectionMessage>();
 
                     message->type = ServerMessageType::DISCONNECT;
                     message->client = this->clients[event.peer->incomingPeerID];
