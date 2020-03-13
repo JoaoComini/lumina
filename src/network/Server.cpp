@@ -29,17 +29,17 @@ namespace net {
         }
     }
 
-    void Server::send(protocol::Message * message, Client * client)
+    void Server::send(Message * message, Client * client)
     {
         // ENetPacket * enetPacket = enet_packet_create (packet->data, packet->length, type);
         // enet_peer_send(packet->destination->getPeer(), type == PacketType::REALIABLE ? 0 : 1, enetPacket);
         enet_host_flush(this->host);
     }
 
-    std::vector<Ref<protocol::Message>> Server::poll()
+    std::vector<Ref<Message>> Server::poll()
     {
         ENetEvent event;
-        std::vector<Ref<protocol::Message>> messages;
+        std::vector<Ref<Message>> messages;
 
         while (enet_host_service (this->host, &event, 0) > 0) {
             switch (event.type) {

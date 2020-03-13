@@ -7,7 +7,6 @@
 #include <atomic>
 
 #include "../Lumina.hpp"
-#include "../protocol/Message.hpp"
 
 #include "ConnectionMessage.hpp"
 #include "DataMessage.hpp"
@@ -35,10 +34,10 @@ namespace net {
             void bind(uint16_t port);
             void close();
 
-            std::vector<Ref<protocol::Message>> poll();
+            std::vector<Ref<Message>> poll();
             void stop();
 
-            void send(protocol::Message * message, Client * destination);
+            void send(Message * message, Client * destination);
 
             size_t clientCount() const;
 

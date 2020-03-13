@@ -1,7 +1,9 @@
 #pragma once
 
+#include <cstdint>
+
 namespace lumina{
-namespace protocol {
+namespace net {
 
     struct Message
     {

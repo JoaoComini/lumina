@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../protocol/Message.hpp"
+#include "Message.hpp"
 #include "../network/Client.hpp"
 
 namespace lumina {
 namespace net {
 
-    struct DataMessage : protocol::Message
+    struct DataMessage : Message
     {
         Ref<Client> client;
         void * data;

@@ -4,8 +4,6 @@
 
 #include "../Lumina.hpp"
 
-#include "../protocol/Message.hpp"
-
 #include "../network/ConnectionMessage.hpp"
 #include "../network/DataMessage.hpp"
 #include "../network/DisconnectionMessage.hpp"
