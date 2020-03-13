@@ -3,44 +3,44 @@
 #include <iostream>
 #include <functional>
 #include <map>
+#include <vector>
 #include <atomic>
 
-#include "lumina/network/Packet.hpp"
-
+#include "../Lumina.hpp"
+#include "../protocol/Message.hpp"
+#include "ServerMessageFactory.hpp"
+#include "Client.hpp"
 
 namespace lumina {
 namespace net {
 
-class Server
-{
+    class Server
+    {
 
-public:
-    Server(uint16_t port, uint16_t connections);
-    ~Server();
+        public:
+            Server(uint16_t connections);
+            ~Server();
 
-    void bind();
-    void close();
-    
-    void poll();
-    void stop();
+            void bind(uint16_t port);
+            void close();
+            
+            std::vector<Ref<protocol::Message>> poll();
+            void stop();
 
-    void sendUnreliable(std::shared_ptr<Client> destination, Packet * packet);
-    void sendReliable(std::shared_ptr<Client> destination, Packet * packet);
-    size_t clientCount() const;
+            void send(protocol::Message * message, Client * destination);
+            
+            size_t clientCount() const;
 
-protected:
-    virtual void onReceive(Packet * packet) = 0;
-    virtual void onConnect(std::shared_ptr<Client> client) = 0;
-    virtual void onDisconnect(std::shared_ptr<Client> client) = 0;
+        protected:
+            std::map<uint16_t, Ref<Client>> clients;
 
-    std::map<std::pair<uint32_t, uint16_t>, std::shared_ptr<Client>> clients;
-
-private:    
-    ENetAddress address;
-    ENetHost *host;
-    std::atomic<bool> listening;
-    uint16_t connections;
-}; 
+        private:    
+            ENetAddress address;
+            ENetHost *host;
+            std::atomic<bool> listening;
+            uint16_t connections;
+            Scope<protocol::MessageFactory> messageFactory;
+    }; 
 
 }
 }

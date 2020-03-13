@@ -3,7 +3,19 @@
 namespace lumina {
 namespace net {
 
-    Server::Server(uint16_t port, uint16_t connections) : connections(connections) {
+    Server::Server(uint16_t connections) : connections(connections)
+    {
+        this->messageFactory = makeScope<ServerMessageFactory>();
+    }
+
+    Server::~Server()
+    {
+        enet_host_destroy(this->host);
+        enet_deinitialize();
+    }
+
+    void Server::bind(uint16_t port)
+    {
         this->address.host = ENET_HOST_ANY;
         this->address.port = port;
 
@@ -20,61 +32,67 @@ namespace net {
         }
     }
 
-    Server::~Server()
+    void Server::send(protocol::Message * message, Client * client)
     {
-        enet_host_destroy(this->host);
+        // ENetPacket * enetPacket = enet_packet_create (packet->data, packet->length, type);
+        // enet_peer_send(packet->destination->getPeer(), type == PacketType::REALIABLE ? 0 : 1, enetPacket);
+        enet_host_flush(this->host);
     }
 
-    void Server::sendUnreliable(std::shared_ptr<Client> client, Packet * packet)
-    {
-        ENetPacket * enetPacket = enet_packet_create (packet->data, packet->length, ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
-        enet_peer_send (client->getPeer(), 0, enetPacket);
-    }
-
-    void Server::sendReliable(std::shared_ptr<Client> client, Packet * packet)
-    {
-        ENetPacket * enetPacket = enet_packet_create (packet->data, packet->length, ENET_PACKET_FLAG_RELIABLE);
-        enet_peer_send (client->getPeer(), 1, enetPacket);
-    }
-
-    void Server::poll()
+    std::vector<Ref<protocol::Message>> Server::poll()
     {
         ENetEvent event;
+        std::vector<Ref<protocol::Message>> messages;
+
         while (enet_host_service (this->host, &event, 0) > 0) {
             switch (event.type) {
                 case ENET_EVENT_TYPE_CONNECT: {
-                    std::shared_ptr<Client> client = std::make_shared<Client>(event.peer);
+                    auto message = refCast<ConnectionMessage>(
+                        this->messageFactory->create(ServerMessageType::CONNECT)
+                    );
 
-                    auto key = std::make_pair(client->getHost(), client->getPort());
+                    Ref<Client> client = makeRef<Client>(event.peer);
+                    this->clients[client->getId()] = client;
 
-                    this->clients[key] = client;
+                    message->type = ServerMessageType::CONNECT;
+                    message->client = client;
 
-                    this->onConnect(client);
+                    messages.push_back(message);
                 }
                 break;
                 case ENET_EVENT_TYPE_RECEIVE: {
-                    Packet * packet = new Packet();
+                    auto message = refCast<DataMessage>(
+                        this->messageFactory->create(ServerMessageType::DATA)
+                    );
 
-                    packet->data = event.packet->data;
-                    packet->length = event.packet->dataLength;
-                    packet->source = std::make_shared<Client>(event.peer);
+                    Ref<Client> client = makeRef<Client>(event.peer);
+                    this->clients[client->getId()] = client;
 
-                    this->onReceive(packet);
+                    message->type = ServerMessageType::DATA;
+                    message->client = client;
+                    message->data = event.packet->data;
+                    message->length = event.packet->dataLength;
+
+                    messages.push_back(message);
                 }
                 break;
                 case ENET_EVENT_TYPE_DISCONNECT: {
-                    std::shared_ptr<Client> client = std::make_shared<Client>(event.peer);
+                    auto message = refCast<DisconnectionMessage>(
+                        this->messageFactory->create(ServerMessageType::DISCONNECT)
+                    );
 
-                    auto key = std::make_pair(client->getHost(), client->getPort());
+                    message->type = ServerMessageType::DISCONNECT;
+                    message->client = this->clients[event.peer->incomingPeerID];
 
-                    this->clients.erase(key);
-
-                    this->onDisconnect(client);
+                    messages.push_back(message);
+                    
+                    this->clients.erase(event.peer->incomingPeerID);
                 }
                 break;
             }
-
         }
+
+        return messages;
     }
 
     void Server::stop()
