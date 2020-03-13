@@ -5,11 +5,11 @@
 
 #include <vector>
 
-namespace lumina
-{ 
+namespace lumina { 
+namespace engine {
     
     class Room
-    {       
+    {
         public:
             Room(size_t capacity);
 
@@ -23,5 +23,6 @@ namespace lumina
             size_t capacity;
             std::vector<Ref<net::Client>> players;
     };
-
+    
+} // namespace engine
 } // namespace lumina

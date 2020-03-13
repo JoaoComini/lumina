@@ -1,8 +1,8 @@
 #include "lumina/engine/Room.hpp"
 
-namespace lumina
-{
-    
+namespace lumina {
+namespace engine {
+
     Room::Room(size_t capacity): capacity(capacity) { }
 
     void Room::addPlayer(Ref<net::Client> client)
@@ -24,4 +24,5 @@ namespace lumina
         return this->players;
     }
 
+} // namespace engine
 } // namespace lumina
