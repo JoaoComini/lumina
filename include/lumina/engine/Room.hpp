@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Lumina.hpp"
 #include "../network/Client.hpp"
 
 #include <vector>
@@ -12,13 +13,15 @@ namespace lumina
         public:
             Room(size_t capacity);
 
-            void addPlayer(std::shared_ptr<net::Client> client);
+            void addPlayer(Ref<net::Client> client);
 
             bool isFull();
 
+            std::vector<Ref<net::Client>> getPlayers() const;
+
         private:
             size_t capacity;
-            std::vector<std::shared_ptr<net::Client>> players;
+            std::vector<Ref<net::Client>> players;
     };
 
 } // namespace lumina

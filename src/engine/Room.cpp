@@ -5,7 +5,7 @@ namespace lumina
     
     Room::Room(size_t capacity): capacity(capacity) { }
 
-    void Room::addPlayer(std::shared_ptr<net::Client> client)
+    void Room::addPlayer(Ref<net::Client> client)
     {
         if (this->isFull()) {
             return;
@@ -17,6 +17,11 @@ namespace lumina
     bool Room::isFull()
     {
         return this->capacity == this->players.size();
+    }
+
+    std::vector<Ref<net::Client>> Room::getPlayers() const
+    {
+        return this->players;
     }
 
 } // namespace lumina
