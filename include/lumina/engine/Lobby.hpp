@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <scratchy/scratchy.h>
 
 #include "../Lumina.hpp"
 
@@ -9,12 +10,11 @@
 #include "../network/DisconnectionMessage.hpp"
 
 #include "Room.hpp"
-#include "Input.hpp"
 
 namespace lumina {
 namespace engine {
 
-    enum LobbyInputType
+    enum LobbyMessageType
     {
         CREATE_ROOM,
         ENTER_ROOM,
