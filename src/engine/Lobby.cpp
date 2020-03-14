@@ -21,26 +21,29 @@ namespace engine {
         uint8_t type = stream->read<uint8_t>();
 
         switch (type) {
-            case LobbyInputType::CREATE_ROOM:
+            case LobbyMessageType::CREATE_ROOM:
                 // @TODO: room creation logic
-                this->rooms[this->roomIndex]->addPlayer(message->client);
+                this->rooms[this->roomIndex]->add(message->clientId);
             break;
 
-            case LobbyInputType::ENTER_ROOM: {
+            case LobbyMessageType::ENTER_ROOM: {
                 // @TODO: room enter logic
-                uint8_t room = stream->read<uint8_t>();
+                uint8_t roomId = stream->read<uint8_t>();
 
-                this->rooms[room]->addPlayer(message->client);
+                this->rooms[roomId]->add(message->clientId);
             }
             break;
 
-            case LobbyInputType::MATCHMAKING:
+            case LobbyMessageType::MATCHMAKING:
                 // @TODO: support matchmaking algorithms
-                this->rooms[this->roomIndex]->addPlayer(message->client);
+                this->rooms[this->roomIndex]->add(message->clientId);
             break;
 
-            case LobbyInputType::ROOM_INPUT:
-                // @TODO: proxy input to the right room
+            case LobbyMessageType::ROOM_INPUT: {
+                uint8_t roomId = stream->read<uint8_t>();
+
+                this->rooms[roomId]->receive(stream);
+            }
             break;
 
             default:

@@ -8,7 +8,7 @@ namespace net {
 
     struct DataMessage : Message
     {
-        Ref<Client> client;
+        uint16_t clientId;
         void * data;
         size_t length;
     };

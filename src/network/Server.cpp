@@ -50,7 +50,7 @@ namespace net {
                     this->clients[client->getId()] = client;
 
                     message->type = ServerMessageType::CONNECT;
-                    message->client = client;
+                    message->clientId = client->getId();
 
                     messages.push_back(message);
                 }
@@ -62,7 +62,7 @@ namespace net {
                     this->clients[client->getId()] = client;
 
                     message->type = ServerMessageType::DATA;
-                    message->client = client;
+                    message->clientId = client->getId();
                     message->data = event.packet->data;
                     message->length = event.packet->dataLength;
 
@@ -73,7 +73,7 @@ namespace net {
                     auto message = makeRef<DisconnectionMessage>();
 
                     message->type = ServerMessageType::DISCONNECT;
-                    message->client = this->clients[event.peer->incomingPeerID];
+                    message->clientId = event.peer->incomingPeerID;
 
                     messages.push_back(message);
 

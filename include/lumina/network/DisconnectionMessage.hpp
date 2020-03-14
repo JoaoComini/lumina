@@ -8,7 +8,7 @@ namespace net {
 
     struct DisconnectionMessage : Message
     {
-        Ref<Client> client;
+        uint16_t clientId;
     };
 
 } // namespace net

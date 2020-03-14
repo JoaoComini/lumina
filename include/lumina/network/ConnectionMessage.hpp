@@ -8,7 +8,7 @@ namespace net {
 
     struct ConnectionMessage : Message
     {
-        Ref<net::Client> client;
+        uint16_t clientId;
     };
 
 } // namespace net
