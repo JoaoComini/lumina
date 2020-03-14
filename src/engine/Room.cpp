@@ -5,21 +5,26 @@ namespace engine {
 
     Room::Room(size_t capacity): capacity(capacity) { }
 
-    void Room::addPlayer(Ref<net::Client> client)
+    void Room::add(uint16_t clientId)
     {
         if (this->isFull()) {
             return;
         }
 
-        this->players.push_back(client);
+        this->players[clientId] = makeRef<Player>(clientId);
     }
 
-    bool Room::isFull()
+    void Room::receive(Ref<InputBitStream> &stream)
+    {
+        uint16_t clientId = stream->read<uint16_t>();
+    }
+
+    bool Room::isFull() const
     {
         return this->capacity == this->players.size();
     }
 
-    std::vector<Ref<net::Client>> Room::getPlayers() const
+    std::map<uint16_t, Ref<Player>> Room::getPlayers() const
     {
         return this->players;
     }

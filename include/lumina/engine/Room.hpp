@@ -1,28 +1,31 @@
 #pragma once
 
+#include <map>
+#include <scratchy/scratchy.h>
+
 #include "../Lumina.hpp"
 #include "../network/Client.hpp"
 
-#include <vector>
+#include "Player.hpp"
 
-namespace lumina { 
+namespace lumina {
 namespace engine {
-    
+
     class Room
     {
         public:
             Room(size_t capacity);
 
-            void addPlayer(Ref<net::Client> client);
+            void add(uint16_t clientId);
+            void receive(Ref<InputBitStream> &stream);
 
-            bool isFull();
-
-            std::vector<Ref<net::Client>> getPlayers() const;
+            bool isFull() const;
+            std::map<uint16_t, Ref<Player>> getPlayers() const;
 
         private:
             size_t capacity;
-            std::vector<Ref<net::Client>> players;
+            std::map<uint16_t, Ref<Player>> players;
     };
-    
+
 } // namespace engine
 } // namespace lumina

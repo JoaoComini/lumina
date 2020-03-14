@@ -9,6 +9,7 @@ set(
     "./src/network/Client.cpp"
     "./src/engine/Lobby.cpp"
     "./src/engine/Room.cpp"
+    "./src/engine/Player.cpp"
     "./src/engine/Application.cpp"
 )
 
