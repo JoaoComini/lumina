@@ -3,31 +3,42 @@
 namespace lumina {
 namespace engine {
 
-    Room::Room(size_t capacity): capacity(capacity) { }
-
-    void Room::add(uint16_t clientId)
+    void Room::connect(Ref<net::ConnectionMessage> message)
     {
-        if (this->isFull()) {
-            return;
+        auto player = this->players[message->clientId] = makeRef<Player>(message->clientId);
+        this->onPlayerConnect(player);
+    }
+
+    void Room::receive(Ref<net::DataMessage> message)
+    {
+        Ref<InputBitStream> stream = makeRef<InputBitStream>(message->data, message->length);
+
+        switch (stream->read<uint8_t>()) {
+            case RoomMessages::INPUT:
+                this->players[message->clientId]->input->deserialize(stream);
+                break;
+
+            case RoomMessages::ACTION: {
+                uint8_t type = stream->read<uint8_t>();
+                auto action = this->actionFactory->create(type);
+
+                action->type = type;
+
+                this->onAction(action, this->players[message->clientId]);
+            }
+                break;
+            default:
+                throw "Invalid Room message type";
+                break;
         }
-
-        this->players[clientId] = makeRef<Player>(clientId);
     }
 
-    void Room::receive(Ref<InputBitStream> &stream)
+    void Room::disconnect(Ref<net::DisconnectionMessage> message)
     {
-        uint16_t clientId = stream->read<uint16_t>();
+        this->onPlayerDisconnect(this->players[message->clientId]);
+        this->players.erase(message->clientId);
     }
 
-    bool Room::isFull() const
-    {
-        return this->capacity == this->players.size();
-    }
-
-    std::map<uint16_t, Ref<Player>> Room::getPlayers() const
-    {
-        return this->players;
-    }
 
 } // namespace engine
 } // namespace lumina

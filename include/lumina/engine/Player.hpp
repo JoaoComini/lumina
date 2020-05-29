@@ -4,6 +4,7 @@
 
 #include "../Lumina.hpp"
 #include "../network/Client.hpp"
+#include "Serializable.hpp"
 
 namespace lumina {
 namespace engine {
@@ -12,9 +13,9 @@ namespace engine {
     {
         public:
             Player(uint16_t clientId);
-
+            Ref<Serializable> input;
         private:
-            uint16_t clientId;
+            uint16_t Id;
     };
 
 } // namespace engine

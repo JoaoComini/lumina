@@ -17,7 +17,7 @@
 namespace lumina {
 namespace net {
 
-    enum ServerMessageType : uint8_t
+    enum ServerMessages : uint8_t
     {
         CONNECT,
         DISCONNECT,
@@ -37,12 +37,21 @@ namespace net {
             std::vector<Ref<Message>> poll();
             void stop();
 
-            void send(Message * message, Client * destination);
+            void send(void * data, uint32_t length, Ref<Client> destination);
+            void send(void * data, uint32_t length, uint16_t clientId);
+            void broadcast(void * data, uint32_t length);
+
+            void sendReliable(void * data, uint32_t length, Ref<Client> destination);
+            void sendReliable(void * data, uint32_t length, uint16_t clientId);
+            void broadcastReliable(void * data, uint32_t length);
 
             size_t clientCount() const;
 
         protected:
             std::map<uint16_t, Ref<Client>> clients;
+            Ref<Message> handleConnect(ENetEvent event);
+            Ref<Message> handleReceive(ENetEvent event);
+            Ref<Message> handleDisconnect(ENetEvent event);
 
         private:
             ENetAddress address;

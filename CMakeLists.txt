@@ -7,10 +7,10 @@ set(
     SOURCE_FILES
     "./src/network/Server.cpp"
     "./src/network/Client.cpp"
-    "./src/engine/Lobby.cpp"
     "./src/engine/Room.cpp"
     "./src/engine/Player.cpp"
     "./src/engine/Application.cpp"
+    "./src/physics/PhysicsContext.cpp"
 )
 
 set(
@@ -27,12 +27,14 @@ add_library(
 )
 
 target_compile_options(lumina PRIVATE -Werror)
-target_compile_features(lumina PRIVATE cxx_std_11)
+target_compile_features(lumina PRIVATE cxx_std_17)
 
 add_subdirectory(third_party/enet)
 add_subdirectory(third_party/scratchy)
 
 set(TARGET_BUILD_PLATFORM "linux")
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
 
 set(PHYSX_ROOT_DIR "${CMAKE_SOURCE_DIR}/third_party/PhysX/physx")
 set(PXSHARED_PATH "${PHYSX_ROOT_DIR}/../pxshared")

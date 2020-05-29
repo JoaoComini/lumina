@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Message.hpp"
-#include "../network/Client.hpp"
 
 namespace lumina {
 namespace net {
